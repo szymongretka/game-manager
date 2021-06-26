@@ -1,0 +1,13 @@
+server:
+  port: 9000
+
+eureka:
+  client:
+    fetch-registry: false #Do not register yourself
+    register-with-eureka: false  #Do not register on another server
+    service-url:
+      default-zone: http://localhost:${server.port}/eureka
+  instance:
+    hostname: localhost #The domain we manage
+  server:
+    renewal-percent-threshold: 0.85 #Refresh rate < 1s
