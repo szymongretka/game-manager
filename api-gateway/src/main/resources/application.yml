@@ -8,11 +8,13 @@ spring:
     gateway:
       routes:
         - id : app-provider-service
-          uri: http://localhost:8045
+#          uri: http://localhost:8045
+          uri: lb://APP-PROVIDER-SERVICE
           predicates:
             - Path=/app/**
         - id: data-provider-service
-          uri: http://localhost:8050
+#          uri: http://localhost:8050
+          uri: lb://DATA-PROVIDER-SERVICE
           predicates:
             - Path=/data/**
 eureka:

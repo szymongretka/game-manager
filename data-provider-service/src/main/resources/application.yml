@@ -1,0 +1,15 @@
+server:
+  port: 8050
+
+spring:
+  application:
+    name: data-provider-service
+
+eureka:
+  instance:
+    appname: ${spring.application.name}
+  client:
+    fetch-registry: true #Register the service to the Eureka server
+    service-url:
+      defaultZone: http://localhost:9000/eureka #In the following server
+
