@@ -1,11 +1,11 @@
 server:
-  port: 8050
+  port: 8045
   servlet:
-    context-path: /data
+    context-path: /app
 
 spring:
   application:
-    name: data-provider-service
+    name: app-provider-service
   profiles:
     active: test
 
@@ -16,4 +16,3 @@ eureka:
     fetch-registry: true #Register the service to the Eureka server
     service-url:
       defaultZone: http://localhost:9000/eureka #In the following server
-
