@@ -7,16 +7,26 @@ spring:
   cloud:
     gateway:
       routes:
-        - id : app-provider-service
-#          uri: http://localhost:8045
+        - id: app-provider-service
           uri: lb://APP-PROVIDER-SERVICE
           predicates:
             - Path=/app/**
         - id: data-provider-service
-#          uri: http://localhost:8050
           uri: lb://DATA-PROVIDER-SERVICE
           predicates:
             - Path=/data/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 2
+                redis-rate-limiter.requestedTokens: 1
+
+management:
+  health:
+    redis:
+      enabled: true
+
 eureka:
   instance:
     appname: ${spring.application.name}
