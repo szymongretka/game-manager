@@ -8,6 +8,12 @@ spring:
     name: data-provider-service
   profiles:
     active: test
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://uaa:8090/uaa/token_keys
+
 
 eureka:
   instance:

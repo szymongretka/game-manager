@@ -1,0 +1,73 @@
+version: '3'
+services:
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    image: eureka-server:latest
+    expose:
+      - "9000"
+    ports:
+      - "9000:9000"
+    networks:
+      - game-manager-network
+  uaa:
+    image: scg-demo-uaa:latest
+    container_name: uaa
+    expose:
+      - "8090"
+    ports:
+      - "8090:8090"
+    networks:
+      - game-manager-network
+    links:
+      - eureka-server:eureka-server
+    depends_on:
+      - eureka-server
+      - api-gateway
+  app-provider-service:
+    container_name: app-provider-service
+    build:
+      context: ./app-provider-service
+      dockerfile: Dockerfile
+    image: app-provider-service:latest
+    expose:
+      - "8045"
+    networks:
+      - game-manager-network
+    links:
+      - eureka-server:eureka-server
+    depends_on:
+      - eureka-server
+      - api-gateway
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: api-gateway:latest
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - game-manager-network
+    links:
+      - eureka-server:eureka-server
+    depends_on:
+      - eureka-server
+#  postgres:
+#    image: postgres:13
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#    ports:
+#      - '5438:5432'
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  game-manager-network:
+#volumes:
+#  postgres-data:

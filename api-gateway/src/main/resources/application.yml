@@ -4,9 +4,18 @@ server:
 spring:
   application:
     name: api-gateway
+  #  autoconfigure:
+  #    # TODO: remove when fixed https://github.com/spring-projects/spring-security/issues/6314
+  #    exclude: org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration
+  main:
+    allow-bean-definition-overriding: true
   cloud:
     gateway:
       routes:
+        - id: uaa
+          uri: lb://UAA #http://uaa:8090/uaa
+          predicates:
+            - Path=/uaa/**
         - id: app-provider-service
           uri: lb://APP-PROVIDER-SERVICE
           predicates:
@@ -21,6 +30,27 @@ spring:
                 redis-rate-limiter.replenishRate: 2
                 redis-rate-limiter.burstCapacity: 2
                 redis-rate-limiter.requestedTokens: 1
+      default-filters:
+        - TokenRelay
+        - RemoveRequestHeader=Cookie
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: uaa
+            client-id: gateway
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
+            scope: openid,profile,email,resource.read
+        provider:
+          uaa:
+            authorization-uri: http://localhost:8090/uaa/oauth/authorize
+            token-uri: http://localhost:8090/uaa/oauth/token
+            user-info-uri: http://localhost:8090/uaa/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: http://localhost:8090/uaa/token_keys
 
 management:
   health:
