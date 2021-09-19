@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
         <option value="$PROJECT_DIR$/app-provider-service/pom.xml" />
         <option value="$PROJECT_DIR$/data-provider-service/pom.xml" />
+        <option value="$PROJECT_DIR$/login-service/pom.xml" />
       </list>
     </option>
   </component>

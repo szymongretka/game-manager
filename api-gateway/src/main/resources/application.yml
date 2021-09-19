@@ -15,6 +15,10 @@ spring:
           uri: lb://DATA-PROVIDER-SERVICE
           predicates:
             - Path=/data/**
+        - id: login-service
+          uri: lb://LOGIN-SERVICE
+          predicates:
+            - Path=/login/**
           filters:
             - name: RequestRateLimiter
               args:

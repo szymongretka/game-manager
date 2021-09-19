@@ -1,0 +1,17 @@
+server:
+  port: 8020
+  servlet:
+    context-path: /login
+
+spring:
+  application:
+    name: login-service
+
+eureka:
+  instance:
+    appname: ${spring.application.name}
+  client:
+    fetch-registry: true #Register the service to the Eureka server
+    service-url:
+      defaultZone: http://localhost:9000/eureka #In the following server
+
