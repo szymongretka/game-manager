@@ -22,7 +22,6 @@ public class Admin {
     private String email;
     private Integer loginAttempt;
 
-
     @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();

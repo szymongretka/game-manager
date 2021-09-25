@@ -1,2 +1,3 @@
 jwt:
   secretKey: secret
+  validityInMilliseconds: 3600000

@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: api-gateway
   cloud:
@@ -30,6 +32,9 @@ management:
   health:
     redis:
       enabled: true
+
+jwt:
+  secretKey: secret
 
 eureka:
   instance:

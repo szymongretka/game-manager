@@ -15,3 +15,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:9000/eureka #In the following server
 
+jwt:
+  secretKey: secret
+  validityInMilliseconds: 3600000
+

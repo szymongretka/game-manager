@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import pl.sg.dataproviderservice.model.Admin;
 import pl.sg.dataproviderservice.repository.AdminRepository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -26,6 +27,7 @@ public class StartUpTEST {
                                 .username("admin")
                                 .password(BCrypt.hashpw("admin", BCrypt.gensalt()))
                                 .email("admin@mail.com")
+                                .roles(Arrays.asList("ADMIN"))
                                 .build());
             }
         };
