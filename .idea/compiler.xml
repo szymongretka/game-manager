@@ -16,7 +16,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api-gateway" target="16" />
-      <module name="app-provider-service" target="11" />
+      <module name="app-provider-service" target="16" />
       <module name="data-provider-service" target="16" />
       <module name="eureka-server" target="16" />
       <module name="test-service" target="16" />
