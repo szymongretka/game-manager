@@ -1,13 +1,18 @@
 server:
   port: 8050
-  servlet:
-    context-path: /data
 
 spring:
+  webflux:
+    base-path: /data
   application:
     name: data-provider-service
   profiles:
     active: test
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
 
 eureka:
   instance:

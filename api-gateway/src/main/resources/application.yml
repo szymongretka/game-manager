@@ -1,11 +1,34 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
   application:
     name: api-gateway
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: api-gateway
+            client-secret: 636f4ef3-e6aa-4076-a5ae-5e4925524fed
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.requestedTokens: 1
       routes:
         - id: app-provider-service
           uri: lb://APP-PROVIDER-SERVICE
@@ -15,12 +38,12 @@ spring:
           uri: lb://DATA-PROVIDER-SERVICE
           predicates:
             - Path=/data/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 2
-                redis-rate-limiter.burstCapacity: 2
-                redis-rate-limiter.requestedTokens: 1
+#          filters:
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 2
+#                redis-rate-limiter.burstCapacity: 2
+#                redis-rate-limiter.requestedTokens: 1
 
 management:
   health:
