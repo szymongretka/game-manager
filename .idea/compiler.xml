@@ -8,16 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
+        <module name="test-service" />
         <module name="data-provider-service" />
         <module name="eureka-server" />
         <module name="app-provider-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api-gateway" target="11" />
+      <module name="api-gateway" target="16" />
       <module name="app-provider-service" target="11" />
-      <module name="data-provider-service" target="11" />
-      <module name="eureka-server" target="11" />
+      <module name="data-provider-service" target="16" />
+      <module name="eureka-server" target="16" />
+      <module name="test-service" target="16" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -26,6 +28,7 @@
       <module name="app-provider-service" options="-parameters" />
       <module name="data-provider-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="test-service" options="-parameters" />
     </option>
   </component>
 </project>
