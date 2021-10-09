@@ -20,5 +20,5 @@ eureka:
   client:
     fetch-registry: true #Register the service to the Eureka server
     service-url:
-      defaultZone: http://localhost:9000/eureka #In the following server
+      defaultZone: ${EUREKA_SERVER:http://localhost:9000}/eureka #In the following server
 

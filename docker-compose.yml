@@ -20,4 +20,59 @@ services:
     ports:
       - 8080:8080
 
-  #services TODO
+  #services
+  eureka:
+    image: eureka-server:latest
+    container_name: eureka
+    expose:
+      - "9000"
+    ports:
+      - "9000:9000"
+    environment:
+      - EUREKA_SERVER=http://eureka:9000
+      - EUREKA_HOST=eureka
+
+  gateway:
+    image: api-gateway:latest
+    container_name: gateway
+    expose:
+      - "8082"
+    ports:
+      - "8082:8082"
+    depends_on:
+      - keycloak
+      - eureka
+#      - app-service
+    environment:
+      - KEYCLOAK_URL=http://192.168.0.85:8080
+      - EUREKA_SERVER=http://eureka:9000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  data-service:
+    image: data-service:latest
+    container_name: data-service
+    expose:
+      - "8050"
+    ports:
+      - "8050:8050"
+    depends_on:
+      - eureka
+      - keycloak
+    environment:
+      - KEYCLOAK_URL=http://192.168.0.85:8080
+      - EUREKA_SERVER=http://eureka:9000
+
+  app-service:
+    image: app-service:latest
+    container_name: app-service
+    expose:
+      - "8045"
+    ports:
+      - "8045:8045"
+    depends_on:
+      - eureka
+      - keycloak
+    environment:
+      - KEYCLOAK_URL=http://192.168.0.85:8080
+      - EUREKA_SERVER=http://eureka:9000

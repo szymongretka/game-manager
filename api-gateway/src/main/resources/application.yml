@@ -18,8 +18,8 @@ spring:
   session:
     store-type: redis
   redis:
-    host: localhost
-    port: 6379
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
   cloud:
     gateway:
       default-filters:
@@ -55,4 +55,4 @@ eureka:
     appname: ${spring.application.name}
   client:
     service-url:
-      defaultZone: http://localhost:9000/eureka
+      defaultZone: ${EUREKA_SERVER:http://localhost:9000}/eureka
