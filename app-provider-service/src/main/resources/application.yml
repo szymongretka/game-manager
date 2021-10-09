@@ -1,13 +1,18 @@
 server:
   port: 8045
-  servlet:
-    context-path: /app
 
 spring:
   application:
     name: app-provider-service
+  webflux:
+    base-path: /app
   profiles:
     active: test
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
   jpa:
     hibernate:
       ddl-auto: update
