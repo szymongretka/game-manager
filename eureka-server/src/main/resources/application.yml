@@ -6,8 +6,9 @@ eureka:
     fetch-registry: false #Do not register yourself
     register-with-eureka: false  #Do not register on another server
     service-url:
-      default-zone: http://localhost:${server.port}/eureka
+      defaultZone: ${EUREKA_SERVER:http://localhost:9000}/eureka
   instance:
-    hostname: localhost #The domain we manage
+    hostname: ${EUREKA_HOST:localhost} #The domain we manage
   server:
     renewal-percent-threshold: 0.85 #Refresh rate < 1s
+    max-threads-for-peer-replication: 0

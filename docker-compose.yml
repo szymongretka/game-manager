@@ -28,6 +28,9 @@ services:
       - "9000"
     ports:
       - "9000:9000"
+    environment:
+      - EUREKA_SERVER=http://eureka:9000
+      - EUREKA_HOST=eureka
 
   gateway:
     image: api-gateway:latest
@@ -39,9 +42,9 @@ services:
     depends_on:
       - keycloak
       - eureka
-#      - greeting-service
+#      - app-service
     environment:
-      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -57,7 +60,7 @@ services:
       - eureka
       - keycloak
     environment:
-      - KEYCLOAK_URL=http://kubernetes.docker.internal:8080
+      - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
 
   app-service:
@@ -71,7 +74,7 @@ services:
       - eureka
       - keycloak
     environment:
-      - KEYCLOAK_URL=http://kubernetes.docker.internal:8080
+      - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
 
 
