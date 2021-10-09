@@ -1,5 +1,4 @@
-package pl.sg.dataproviderservice.config;
-
+package pl.sg.appproviderservice.config;
 
 import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 import org.springframework.context.annotation.Bean;

@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.sg.appproviderservice.dto.ResponseFileDTO;
 import pl.sg.appproviderservice.dto.ResponseMessageDTO;
 import pl.sg.appproviderservice.entity.ApplicationFile;
@@ -37,11 +36,7 @@ public class AppController {
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFileDTO>> getListFiles() {
         List<ResponseFileDTO> files = applicationFileService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/files/")
-                    .path(String.valueOf(dbFile.getId()))
-                    .toUriString();
+            String fileDownloadUri = "http://samplepath/files/".concat(String.valueOf(dbFile.getId()));
 
             return new ResponseFileDTO(
                     dbFile.getName(),
