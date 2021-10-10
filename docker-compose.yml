@@ -1,6 +1,7 @@
 version: "3.8"
 services:
 
+  #Services
   redis:
     image: redis:6.2.4
     container_name: redis
@@ -20,7 +21,7 @@ services:
     ports:
       - 8080:8080
 
-  #services
+  #Applications
   eureka:
     image: eureka-server:latest
     container_name: eureka
