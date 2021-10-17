@@ -1,6 +1,5 @@
 package pl.sg.android_client.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +37,22 @@ public class MenuActivity extends AppCompatActivity {
                 getData();
             }
         });
+
+//        AuthorizationServiceConfiguration.fetchFromIssuer(
+//                Uri.parse("http://192.168.0.85:8080/auth/realms/GameManager/.well-known/openid-configuration"),
+//                new AuthorizationServiceConfiguration.RetrieveConfigurationCallback() {
+//                    public void onFetchConfigurationCompleted(
+//                            @Nullable AuthorizationServiceConfiguration serviceConfiguration,
+//                            @Nullable AuthorizationException ex) {
+//                        if (ex != null) {
+//                            Log.e("SOME TAG", "failed to fetch configuration");
+//                            return;
+//                        }
+//                        serviceConfiguration.toJson();
+//                        System.out.println("test");
+//                        // use serviceConfiguration as needed
+//                    }
+//                });
 
     }
 

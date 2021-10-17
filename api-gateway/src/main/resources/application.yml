@@ -9,11 +9,13 @@ spring:
       client:
         registration:
           keycloak:
+            enable-cors: true
             client-id: api-gateway
-            client-secret: 636f4ef3-e6aa-4076-a5ae-5e4925524fed
+            client-secret: 6988e5af-be15-4493-a88b-5c3571b049e9
             scope: openid
         provider:
           keycloak:
+            enable-cors: true
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
   session:
     store-type: redis

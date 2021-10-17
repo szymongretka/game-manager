@@ -30,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private static String accessToken;
 
-    private final String CLIENT_ID = "api-gateway";//""android-login";
-    private final String CLIENT_SECRET = "636f4ef3-e6aa-4076-a5ae-5e4925524fed";//"35355373-f0bd-4462-bfe6-8dcfcd593b1f"
+    private final String CLIENT_ID = "api-gateway";
+    private final String CLIENT_SECRET = "636f4ef3-e6aa-4076-a5ae-5e4925524fed";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
