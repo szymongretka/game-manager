@@ -21,8 +21,8 @@ public class ApplicationFile {
     private Long id;
     private String name;
     private String type;
-//    @Lob
-//    private Blob thumbnail;
+    @Lob
+    private Blob thumbnail;
     @Lob
     @JsonIgnore
     private byte[] data;

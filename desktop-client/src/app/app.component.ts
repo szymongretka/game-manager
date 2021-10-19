@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { OnInit } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { User } from './types';
 
@@ -14,7 +14,7 @@ import { User } from './types';
 })
 export class AppComponent implements OnInit {
 
-  title = 'Polar Bookshop';
+  title = 'Game Manager';
 
   isAuthenticated: boolean = false;
   user: User | undefined;

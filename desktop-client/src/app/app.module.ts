@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule} from '@angular/common/http';
 
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -27,6 +27,7 @@ import { BookFormComponent } from './book-form/book-form.component';
 import { HttpInterceptorImpl } from './http.interceptor';
 import { AddNewBookComponent } from './add-new-book/add-new-book.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -35,10 +36,15 @@ import { EditBookComponent } from './edit-book/edit-book.component';
     BookFormComponent,
     AddNewBookComponent,
     EditBookComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: "XSRF-TOKEN",
+      headerName: "X-XSRF-TOKEN"
+    }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,

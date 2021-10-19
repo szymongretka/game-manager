@@ -4,19 +4,28 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpErrorResponse, HttpXsrfTokenExtractor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class HttpInterceptorImpl implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let finalRequest = this.prepareRequest(request);
+
+    const headerName = 'XSRF-TOKEN';
+    const respHeaderName = 'X-XSRF-TOKEN';
+    let token = this.httpXsrfTokenExtractor.getToken() as string;
+
+    if (token !== null && !request.headers.has(headerName)) {
+      request = request.clone({ headers: request.headers.set(respHeaderName, token) });
+    }
+
     return next.handle(finalRequest).pipe(tap(() => {},
       (err: any) => {
         if (err instanceof HttpErrorResponse) {

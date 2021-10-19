@@ -3,6 +3,14 @@ export interface Book {
   name: string;
 }
 
+export interface GameDTO {
+  id: number,
+  name: string,
+  url: string,
+  type: string,
+  size: number
+}
+
 export interface User {
   id: string,
   username: string,

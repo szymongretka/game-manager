@@ -5,6 +5,7 @@ import { Book } from '../types';
 import { BookService } from '../book.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import {FileUploadService} from "../services/file-upload.service";
 
 @Component({
   selector: 'app-book-list',
@@ -21,12 +22,14 @@ export class BookListComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private bookService : BookService,
+    private fileService : FileUploadService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {}
 
   ngOnInit() : void {
     this.bookService.getBooks().subscribe(books => this.books = books)
+    this.fileService.getFiles().subscribe(res => console.log(res))
   }
 
   removeBook(isbn: string) : void {
