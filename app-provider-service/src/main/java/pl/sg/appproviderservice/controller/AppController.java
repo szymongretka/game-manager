@@ -38,7 +38,7 @@ public class AppController {
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFileDTO>> getListFiles() {
         List<ResponseFileDTO> files = applicationFileService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = "http://localhost:8082/app/files/".concat(String.valueOf(dbFile.getId()));
+            String fileDownloadUri = "http://localhost:8082/app/files/".concat(String.valueOf(dbFile.getId())); //TODO
 
             return new ResponseFileDTO(
                     dbFile.getId(),

@@ -1,0 +1,56 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: mobile-api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.requestedTokens: 1
+      routes:
+        - id: app-provider-service
+          uri: lb://APP-PROVIDER-SERVICE
+          predicates:
+            - Path=/app/**
+        - id: data-provider-service
+          uri: lb://DATA-PROVIDER-SERVICE
+          predicates:
+            - Path=/data/**
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            enable-cors: true
+            client-id: mobile-api-gateway
+            client-secret: 8ff96422-4d32-4465-a619-ee4502c3abee
+            scope: openid
+        provider:
+          keycloak:
+            enable-cors: true
+            issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
+
+
+  session:
+    store-type: redis
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
+management:
+  health:
+    redis:
+      enabled: true
+
+eureka:
+  instance:
+    appname: ${spring.application.name}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:9000}/eureka

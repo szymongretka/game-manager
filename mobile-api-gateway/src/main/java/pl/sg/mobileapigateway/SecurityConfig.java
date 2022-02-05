@@ -1,4 +1,4 @@
-package pl.sg.apigateway;
+package pl.sg.mobileapigateway;
 
 import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcCli
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
-import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
@@ -31,8 +30,9 @@ public class SecurityConfig {
                         .anyExchange().authenticated())
                 .oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(reactiveClientRegistrationRepository))
                 .logout(logout -> logout.logoutSuccessHandler(oidcLogoutSuccessHandler()))
-                .csrf().disable() //TODO
                 //.csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
+                .csrf().disable() //TODO
+                .cors().disable()
                 .build();
     }
 
@@ -40,7 +40,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // TODO http://localhost:4200"));
+        configuration.setAllowedOrigins(Arrays.asList("*")); //TODO
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

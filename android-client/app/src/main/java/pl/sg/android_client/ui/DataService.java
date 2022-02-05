@@ -22,7 +22,7 @@ public interface DataService {
 
 
     @GET("/books")
-    Call<String> getBooks();
+    Call<String> getBooks(@Header("Cookie") String SESSION);
 
     @Headers("Content-Type: application/json")
     @GET("/data/test")

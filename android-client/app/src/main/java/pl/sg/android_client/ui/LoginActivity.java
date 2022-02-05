@@ -54,7 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         btnBooks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getBooksTest();
+                testAppAuth();
+                //getBooksTest();
             }
         });
 
@@ -90,13 +91,55 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void testAppAuth() {
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void getBooksTest() {
         DataService booksTestService = new Retrofit.Builder()
                 .baseUrl("http://192.168.0.85:8082")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DataService.class);
 
-        Call<String> call = booksTestService.getBooks();
+        String SESSION = "aba5cc7e-a91a-4155-bae6-d979b107f489";
+
+        Call<String> call = booksTestService.getBooks(SESSION);
         final String[] responseUrl = new String[1];
 
         call.enqueue(new Callback<String>() {

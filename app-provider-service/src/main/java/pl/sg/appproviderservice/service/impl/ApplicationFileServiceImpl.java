@@ -36,7 +36,7 @@ public class ApplicationFileServiceImpl implements ApplicationFileService {
 
         File file = File.createTempFile("somePrefix", filePart.filename());
 
-        filePart.transferTo(file).then(Mono.fromRunnable(() -> System.out.println("File length: " + file.length())));
+        filePart.transferTo(file).block();//then(Mono.fromRunnable(() -> System.out.println("File length: " + file.length())));
 
         byte[] bytes = Files.readAllBytes(file.toPath());
 
