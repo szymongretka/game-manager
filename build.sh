@@ -23,3 +23,9 @@ cd app-provider-service
 ./mvnw clean package -DskipTests=true
 docker build --tag app-service .
 cd ..
+
+echo "Building the Mobile api gateway"
+cd mobile-api-gateway
+./mvnw clean package -DskipTests=true
+docker build --tag mobile-api-gateway .
+cd ..

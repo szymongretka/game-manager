@@ -2,12 +2,14 @@ server:
   port: 8045
 
 spring:
+  codec:
+    max-in-memory-size: 2MB
   application:
     name: app-provider-service
   webflux:
     base-path: /app
   profiles:
-    active: test
+    active: dev
   security:
     oauth2:
       resourceserver:

@@ -13,6 +13,7 @@
         <module name="data-provider-service" />
         <module name="eureka-server" />
         <module name="app-provider-service" />
+        <module name="mobile-api-gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,7 @@
       <module name="app-provider-service" target="16" />
       <module name="data-provider-service" target="16" />
       <module name="eureka-server" target="16" />
+      <module name="mobile-api-gateway" target="16" />
       <module name="test-service" target="16" />
     </bytecodeTargetLevel>
   </component>
@@ -29,6 +31,7 @@
       <module name="app-provider-service" options="-parameters" />
       <module name="data-provider-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="mobile-api-gateway" options="-parameters" />
       <module name="test-service" options="-parameters" />
     </option>
   </component>

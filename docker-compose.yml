@@ -1,6 +1,7 @@
 version: "3.8"
 services:
 
+  #Services
   redis:
     image: redis:6.2.4
     container_name: redis
@@ -17,10 +18,11 @@ services:
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
+      DB_VENDOR: h2
     ports:
       - 8080:8080
 
-  #services
+  #Applications
   eureka:
     image: eureka-server:latest
     container_name: eureka
@@ -43,6 +45,22 @@ services:
       - keycloak
       - eureka
 #      - app-service
+    environment:
+      - KEYCLOAK_URL=http://192.168.0.85:8080
+      - EUREKA_SERVER=http://eureka:9000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  mobile-gateway:
+    image: mobile-api-gateway:latest
+    container_name: mobile-gateway
+    expose:
+      - "8083"
+    ports:
+      - "8083:8083"
+    depends_on:
+      - keycloak
+      - eureka
     environment:
       - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000

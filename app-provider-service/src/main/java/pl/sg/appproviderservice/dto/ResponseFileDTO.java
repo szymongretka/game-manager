@@ -11,6 +11,7 @@ import lombok.*;
 @Setter
 @ToString
 public class ResponseFileDTO {
+    private Long id;
     private String name;
     private String url;
     private String type;
