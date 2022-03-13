@@ -9,13 +9,13 @@ import reactor.core.publisher.Mono;
 import java.util.Objects;
 
 @Component
-class CsrfHeaderFilter {// TODO} implements WebFilter {
+class CsrfHeaderFilter implements WebFilter {
 
-//    @Override
-//    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-//        String xsrfToken = Objects.requireNonNull(exchange.getRequest().getCookies().getFirst("XSRF-TOKEN")).getValue();
-//        exchange = exchange.mutate().request(builder -> builder.header("X-XSRF-TOKEN", xsrfToken)).build();
-//        System.out.println("XSRF: " + xsrfToken);
-//        return chain.filter(exchange);
-//    }
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String xsrfToken = Objects.requireNonNull(exchange.getRequest().getCookies().getFirst("XSRF-TOKEN")).getValue();
+        exchange = exchange.mutate().request(builder -> builder.header("X-XSRF-TOKEN", xsrfToken)).build();
+        System.out.println("XSRF: " + xsrfToken);
+        return chain.filter(exchange);
+    }
 }

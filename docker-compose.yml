@@ -18,6 +18,7 @@ services:
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
+      DB_VENDOR: h2
     ports:
       - 8080:8080
 

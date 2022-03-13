@@ -31,8 +31,8 @@ public class SecurityConfig {
                         .anyExchange().authenticated())
                 .oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(reactiveClientRegistrationRepository))
                 .logout(logout -> logout.logoutSuccessHandler(oidcLogoutSuccessHandler()))
-                .csrf().disable() //TODO
-                //.csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
+//                .csrf().disable() //TODO
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
                 .build();
     }
 
