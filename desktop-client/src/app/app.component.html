@@ -6,9 +6,13 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/browse-books">
         <mat-icon>menu_book</mat-icon>
+        <span>Browse Books</span>
+      </a>
+      <a mat-list-item routerLink="/browse-apps">
+        <mat-icon></mat-icon>
         <span>Browse Games</span>
       </a>
-      <a mat-list-item routerLink="/upload-file" *ngIf="isAuthenticated">
+      <a mat-list-item routerLink="/add-app" *ngIf="isAuthenticated">
         <mat-icon></mat-icon>
         <span>Upload Game</span>
       </a>

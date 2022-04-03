@@ -28,6 +28,10 @@ import { HttpInterceptorImpl } from './http.interceptor';
 import { AddNewBookComponent } from './add-new-book/add-new-book.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { AppListComponent } from './app-list/app-list.component';
+import { AppFormComponent } from './app-form/app-form.component';
+import { AddNewAppComponent } from './add-new-app/add-new-app.component';
+import { EditAppComponent } from './edit-app/edit-app.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,10 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     AddNewBookComponent,
     EditBookComponent,
     FileUploadComponent,
+    AppListComponent,
+    AppFormComponent,
+    AddNewAppComponent,
+    EditAppComponent,
   ],
   imports: [
     BrowserModule,

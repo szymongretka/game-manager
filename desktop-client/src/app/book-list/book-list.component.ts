@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Book } from '../types';
-import { BookService } from '../book.service';
+import { BookService } from '../services/book.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {FileUploadService} from "../services/file-upload.service";
@@ -29,7 +29,7 @@ export class BookListComponent implements OnInit {
 
   ngOnInit() : void {
     this.bookService.getBooks().subscribe(books => this.books = books)
-    this.fileService.getFiles().subscribe(res => console.log(res))
+    // this.fileService.getFiles().subscribe(res => console.log(res))
   }
 
   removeBook(isbn: string) : void {

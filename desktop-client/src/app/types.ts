@@ -1,14 +1,15 @@
+import {SafeUrl} from "@angular/platform-browser";
+
 export interface Book {
   id: number | undefined,
   name: string;
 }
 
 export interface GameDTO {
-  id: number,
+  id: string,
+  thumbnailId: string,
   name: string,
-  url: string,
-  type: string,
-  size: number
+  thumbnail: SafeUrl | null
 }
 
 export interface User {

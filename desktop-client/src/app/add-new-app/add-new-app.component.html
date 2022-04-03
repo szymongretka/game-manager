@@ -9,6 +9,13 @@
       <input type="file" name="game" (change)="selectGame($event)" />
     </label>
   </div>
+  <mat-form-field class="appName-form-field" appearance="fill">
+    <mat-label>Application name</mat-label>
+    <input matInput type="text" [(ngModel)]="appName">
+    <button *ngIf="appName" matSuffix mat-icon-button aria-label="Clear" (click)="appName=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
 
   <div class="col-4">
     <button class="btn btn-success btn-sm" [disabled]="!selectedGame" (click)="upload()">
@@ -28,18 +35,4 @@
   >
     {{ progress }}%
   </div>
-</div>
-
-<div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
-
-<div class="card mt-3">
-  <div class="card-header">List of Files</div>
-  <ul
-    class="list-group list-group-flush"
-    *ngFor="let file of fileInfos | async"
-  >
-    <li class="list-group-item">
-      <a href="#" (click)="download(file.id, file.name)" >{{ file.name }}</a>
-    </li>
-  </ul>
 </div>

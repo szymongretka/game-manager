@@ -3,6 +3,7 @@ import {HttpEventType, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {FileUploadService} from 'src/app/services/file-upload.service';
 import * as fileSaver from 'file-saver';
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-file-upload',
@@ -11,35 +12,49 @@ import * as fileSaver from 'file-saver';
 })
 export class FileUploadComponent implements OnInit {
 
-  selectedFiles?: FileList;
-  currentFile?: File;
+  selectedThumbnail?: FileList;
+  selectedGame?: FileList;
+  currentThumbnail?: File;
+  currentGame?: File;
   progress = 0;
   message = '';
 
   fileInfos?: Observable<any>;
+  test: string[] = [];
 
-
-  constructor(private uploadService: FileUploadService) {
+  constructor(private uploadService: FileUploadService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
-    this.fileInfos = this.uploadService.getFiles();
+    // this.fileInfos = this.uploadService.getFiles();
+    //this.download('cheat-sheet.pdf', 'cheat324-sheet.pdf');
+    this.uploadService.test().subscribe(test => this.test = test);
+    // this.downloadThumbnailTest();
   }
 
-  selectFile(event: any): void {
-    this.selectedFiles = event.target.files;
+  selectThumbnail(event: any): void {
+    this.selectedThumbnail = event.target.files;
+  }
+
+  selectGame(event: any): void {
+    this.selectedGame = event.target.files;
   }
 
   upload(): void {
     this.progress = 0;
 
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
+    if (this.selectedThumbnail && this.selectedGame) {
+      const thumbnail: File | null = this.selectedThumbnail.item(0);
+      const game: File | null = this.selectedGame.item(0);
 
-      if (file) {
-        this.currentFile = file;
+      console.log(thumbnail);
+      console.log(game);
 
-        this.uploadService.upload(this.currentFile).subscribe(
+      if (thumbnail && game) {
+        this.currentThumbnail = thumbnail;
+        this.currentGame = game;
+
+        this.uploadService.upload(this.currentThumbnail, this.currentGame).subscribe(
           (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
               this.progress = Math.round(100 * event.loaded / event.total);
@@ -58,22 +73,38 @@ export class FileUploadComponent implements OnInit {
               this.message = 'Could not upload the file!';
             }
 
-            this.currentFile = undefined;
+            this.currentThumbnail = undefined;
+            this.currentGame = undefined;
           });
 
       }
 
-      this.selectedFiles = undefined;
+      this.selectedThumbnail = undefined;
+      this.selectedGame = undefined;
     }
   }
 
 
-  download(id: number, name: string) {
-    this.uploadService.downloadFile(id).subscribe((response: any) => {
+  download(fileName: string, name: string) {
+    this.uploadService.downloadFile(fileName).subscribe((response: any) => {
       let blob:any = new Blob([response]);
       const url = window.URL.createObjectURL(blob);
       fileSaver.saveAs(blob, name);
     }), (error: any) => console.log('Error downloading the file'),
       () => console.info('File downloaded successfully');
   }
+
+
+  image: SafeUrl | null = null;
+
+  // downloadThumbnailTest() {
+  //   const mediaType = 'application/image';
+  //   this.uploadService.downloadThumbnail().subscribe(value => {
+  //     const blob = new Blob([value], { type: mediaType });
+  //     const unsafeImg = URL.createObjectURL(blob);
+  //     this.image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
+  //   }, error1 => {
+  //   });
+  // }
+
 }
