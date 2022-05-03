@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,11 +31,18 @@ class BookController {
     @GetMapping("/books")
     public Flux<Book> getBooks() {
         return Flux.just(
-                new Book("Harry Potter"),
-                new Book("His Dark Materials"),
-                new Book("The Hobbit"),
-                new Book("The Lord of the Rings")
+                new Book("1", "Harry Potter"),
+                new Book("2","His Dark Materials"),
+                new Book("3","The Hobbit"),
+                new Book("4","The Lord of the Rings")
         ).doFirst(() -> log.info("Returning list of books in the catalog"));
+    }
+
+    @GetMapping("/books/{isbn}")
+    public Mono<Book> getBook(@PathVariable String isbn) {
+        return Mono.just(
+                new Book("1", "Harry Potter")
+        ).doFirst(() -> log.info("Returning book"));
     }
 
     @GetMapping("/user")
@@ -50,7 +58,7 @@ class BookController {
 
 }
 
-record Book(String name) {}
+record Book(String isbn, String name) {}
 
 record User(
         String username,

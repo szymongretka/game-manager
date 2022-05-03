@@ -1,17 +1,15 @@
 package pl.sg.appproviderservice.controller;
 
+import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
-import pl.sg.appproviderservice.dto.ResponseMessageDTO;
+import pl.sg.appproviderservice.entity.AppFileMetaData;
 import pl.sg.appproviderservice.entity.ApplicationFile;
 import pl.sg.appproviderservice.repository.ApplicationFileRepository;
 import pl.sg.appproviderservice.service.ApplicationFileService;
@@ -20,27 +18,22 @@ import reactor.core.publisher.Mono;
 import org.springframework.core.io.Resource;
 import reactor.core.scheduler.Schedulers;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
+import static org.springframework.data.mongodb.gridfs.GridFsCriteria.whereMetaData;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequiredArgsConstructor
-public class AppController {
+public class AppController { //TODO przechowywac info w fs files jako metadane a nie osobno
 
     private final ApplicationFileService applicationFileService; //TODO
     private final ReactiveGridFsTemplate gridFsTemplate;
@@ -49,22 +42,72 @@ public class AppController {
     private Path basePath = Paths.get("").toAbsolutePath();
 
     @PostMapping
-    public Mono<ResponseEntity> upload(@RequestPart Mono<FilePart> thumbnail,
-                                                           @RequestPart Mono<FilePart> game,
-                                                           String name) {
-        return thumbnail
-                .flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename()))
+    public Mono<Object> upload(@RequestPart Mono<FilePart> thumbnail,
+                               @RequestPart Mono<FilePart> game,
+                               @RequestParam String name) {
+
+
+        return gridFsTemplate.findOne(query(whereMetaData().exists(true).and("metadata.name").is(name)))
+                .flatMap(e -> Mono.error(new DuplicateKeyException("App with given name already exists! " + name)))
+                .switchIfEmpty(Mono.defer(() -> thumbnail.flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename(), part.name(), new AppFileMetaData(name)))
                 .map((id) -> {
-                    applicationFileRepository.save(new ApplicationFile(id.toHexString(), "test name")).subscribe();
                     game.flatMap(fp -> fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id))).subscribe();
-                    return ok().body(Map.of("id", id.toHexString()));
-                });
+                    return ok().body(Map.of("id", id));
+                })));
+    }
+
+    @PutMapping("/{id}")
+    public Mono<Object> update(@RequestPart Mono<FilePart> thumbnail,
+                                                            @RequestPart Mono<FilePart> game,
+                                                            @PathVariable String id,
+                                                            @RequestParam String newName) {
+
+        if (Objects.isNull(newName)) {
+            return Mono.just(new ResponseEntity<>(Map.of("null name", ""), HttpStatus.NOT_FOUND));
+        }
+
+        if (Objects.nonNull(game)) {
+            updateGame(game, id);
+        }
+
+        gridFsTemplate.delete(query(where("_id").is(id))).subscribe();
+        return thumbnail
+                .flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename(), new AppFileMetaData(newName)));
+    }
+
+    private void updateGame(Mono<FilePart> game, String id) {
+        try {
+            Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        game.flatMap(fp -> fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id))).subscribe();
     }
 
     @GetMapping
-    public Flux<ApplicationFile> getAllApps() {
-        return applicationFileRepository.findAll();
-//        return applicationFileRepository.findAllByThumbnailIdIn(thumbnailIds);
+    public Flux<AppFileMetaData> getAllApps() {
+        return gridFsTemplate
+                .find(query(whereMetaData().exists(true)))
+                .map(x -> {
+                    AppFileMetaData metaData = new AppFileMetaData();
+                    if (Objects.nonNull(x) && x.getMetadata().containsKey("name")) {
+                        metaData.setName(x.getMetadata().get("name").toString());
+                    }
+                    metaData.setId(x.getObjectId().toHexString());
+                    return metaData;
+                });
+    }
+
+    @GetMapping("/{id}")
+    public Mono<AppFileMetaData> getApp(@PathVariable String id) {
+        return gridFsTemplate.findOne(query(where("_id").is(id))).map(x -> {
+            AppFileMetaData metaData = new AppFileMetaData();
+            if (Objects.nonNull(x) && x.getMetadata().containsKey("name")) {
+                metaData.setName(x.getMetadata().get("name").toString());
+            }
+            metaData.setId(x.getObjectId().toHexString());
+            return metaData;
+        });
     }
 
     @GetMapping("/test")
@@ -92,6 +135,27 @@ public class AppController {
                 .flatMapMany(r -> exchange.getResponse().writeWith(r.getDownloadStream()));
     }
 
+    /**
+     * test get all files matching ids
+     *
+     * @param exchange
+     * @return
+     */
+    @GetMapping("/thumbnail")
+    public Flux<AppFileMetaData> downloadThumbnails(ServerWebExchange exchange) {
+        Flux<GridFSFile> fsFileFlux = gridFsTemplate.find(query(whereMetaData().exists(true)));
+        fsFileFlux.flatMap(gridFsTemplate::getResource).flatMap(r -> exchange.getResponse().writeWith(r.getDownloadStream())).subscribe();
+        return fsFileFlux
+                .map(x -> {
+                    AppFileMetaData metaData = new AppFileMetaData();
+                    if (Objects.nonNull(x) && x.getMetadata().containsKey("name")) {
+                        metaData.setName(x.getMetadata().get("name").toString());
+                    }
+                    metaData.setId(x.getObjectId().toHexString());
+                    return metaData;
+                });
+    }
+
 
     @GetMapping(value = "/game/{id}", produces = APPLICATION_OCTET_STREAM_VALUE)
     public Mono<ResponseEntity<Resource>> downloadGame(@PathVariable("id") String id) {
@@ -114,9 +178,8 @@ public class AppController {
     @DeleteMapping(value = "/{id}")
     public Mono<Void> delete(@PathVariable("id") String id) throws IOException {
         Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id));
-        applicationFileRepository.deleteByThumbnailId(id).subscribe();
-        return gridFsTemplate.delete(query(where("_id").is(id))).then();
+//        return gridFsTemplate.delete(query(whereMetaData().exists(true).and("metadata.name").is(id))).then();
+        return gridFsTemplate.delete(query(where("_id").is(id)));
     }
-
 
 }

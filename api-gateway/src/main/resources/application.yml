@@ -11,7 +11,7 @@ spring:
           keycloak:
 #            enable-cors: true
             client-id: api-gateway
-            client-secret: 580009c1-079c-41c7-9ab7-28d1cc2eda3d
+            client-secret: 636f4ef3-e6aa-4076-a5ae-5e4925524fed
             scope: openid
         provider:
           keycloak:

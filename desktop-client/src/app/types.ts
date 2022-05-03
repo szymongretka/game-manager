@@ -7,7 +7,6 @@ export interface Book {
 
 export interface GameDTO {
   id: string,
-  thumbnailId: string,
   name: string,
   thumbnail: SafeUrl | null
 }

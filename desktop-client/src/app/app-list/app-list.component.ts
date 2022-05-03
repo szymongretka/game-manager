@@ -33,17 +33,17 @@ export class AppListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.appService.getAppInfo().subscribe(apps => {
+    this.appService.getAppsInfo().subscribe(apps => {
       this.apps = apps;
       apps.forEach(app => {
-        this.downloadThumbnail(app.thumbnailId, app); //TODO fetch all images at once
+        this.downloadThumbnail(app.id, app); //TODO fetch all images at once
       });
     });
   }
 
-  downloadThumbnail(thumbnailId: string, app: GameDTO) {
+  downloadThumbnail(id: string, app: GameDTO) {
     const mediaType = 'application/image';
-    this.uploadService.downloadThumbnail(thumbnailId).subscribe(value => {
+    this.uploadService.downloadThumbnail(id).subscribe(value => {
       const blob = new Blob([value], {type: mediaType});
       const unsafeImg = URL.createObjectURL(blob);
       app.thumbnail = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
@@ -51,8 +51,8 @@ export class AppListComponent implements OnInit {
     });
   }
 
-  removeApp(thumbnailId: string) : void {
-    this.appService.deleteApp(thumbnailId).subscribe();
+  removeApp(id: string) : void {
+    this.appService.deleteApp(id).subscribe();
   }
 
 }

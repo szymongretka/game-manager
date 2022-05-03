@@ -52,7 +52,7 @@ export class AddNewAppComponent implements OnInit {
               this.progress = Math.round(100 * event.loaded / event.total);
             } else if (event instanceof HttpResponse) {
               this.message = event.body.message;
-              this.fileInfos = this.appService.getAppInfo();
+              this.fileInfos = this.appService.getAppsInfo();
             }
           },
           (err: any) => {

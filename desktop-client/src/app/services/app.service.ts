@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpEvent, HttpRequest} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpEvent, HttpParams, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {GameDTO} from "../types";
 
 @Injectable({
@@ -9,13 +9,18 @@ import {GameDTO} from "../types";
 })
 export class AppService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   getAppsThumbnails() {
 
   }
 
-  getAppInfo(): Observable<GameDTO[]> {
+  getAppInfo(id: string): Observable<GameDTO> {
+    return this.httpClient.get<GameDTO>(`/app/${id}`)
+  }
+
+  getAppsInfo(): Observable<GameDTO[]> {
     return this.httpClient.get<GameDTO[]>(`/app`);
   }
 
@@ -24,22 +29,42 @@ export class AppService {
 
     formData.append('thumbnail', thumbnail);
     formData.append('game', game);
-    formData.append('name', appName); //TODO check why null
 
+    let params: HttpParams = new HttpParams();
+    params = params.append('name', appName);
     const req = new HttpRequest('POST', `/app`, formData, {
       reportProgress: true,
-      responseType: 'json'
+      responseType: 'json',
+      params: params
     });
 
     return this.httpClient.request(req);
   }
 
-  editApp() {
+  editApp(appName: string, id: string, thumbnail: File, game: File) {
+    const formData: FormData = new FormData();
 
+    if (thumbnail) {
+      formData.append('thumbnail', thumbnail);
+    }
+    if (game) {
+      formData.append('game', game);
+    }
+
+    let params: HttpParams = new HttpParams();
+    params = params.append('newName', appName);
+    const req = new HttpRequest('PUT', `/app/${id}`, formData, {
+      reportProgress: true,
+      responseType: 'json',
+      params: params
+    });
+
+    return this.httpClient.request(req);
   }
 
-  deleteApp(thumbnailId: string) {
-    return this.httpClient.delete(`/app/${thumbnailId}`);
+  deleteApp(id: string) {
+    return this.httpClient.delete(`/app/${id}`);
   }
+
 
 }
