@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AppService} from "../services/app.service";
-import {Book, GameDTO} from "../types";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 

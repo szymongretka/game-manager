@@ -3,7 +3,6 @@ import {GameDTO} from "../types";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {map} from "rxjs/operators";
 import {MatDialog} from "@angular/material/dialog";
-import {BookService} from "../services/book.service";
 import {FileUploadService} from "../services/file-upload.service";
 import {Router} from "@angular/router";
 import {AppService} from "../services/app.service";

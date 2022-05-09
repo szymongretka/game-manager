@@ -3,19 +3,21 @@ package pl.sg.appproviderservice.controller;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
-import org.springframework.http.*;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import pl.sg.appproviderservice.entity.AppFileMetaData;
-import pl.sg.appproviderservice.entity.ApplicationFile;
 import pl.sg.appproviderservice.repository.ApplicationFileRepository;
 import pl.sg.appproviderservice.service.ApplicationFileService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import org.springframework.core.io.Resource;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
@@ -23,7 +25,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -56,33 +61,33 @@ public class AppController { //TODO przechowywac info w fs files jako metadane a
                 })));
     }
 
-    @PutMapping("/{id}")
-    public Mono<Object> update(@RequestPart Mono<FilePart> thumbnail,
-                                                            @RequestPart Mono<FilePart> game,
-                                                            @PathVariable String id,
-                                                            @RequestParam String newName) {
-
-        if (Objects.isNull(newName)) {
-            return Mono.just(new ResponseEntity<>(Map.of("null name", ""), HttpStatus.NOT_FOUND));
-        }
-
-        if (Objects.nonNull(game)) {
-            updateGame(game, id);
-        }
-
-        gridFsTemplate.delete(query(where("_id").is(id))).subscribe();
-        return thumbnail
-                .flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename(), new AppFileMetaData(newName)));
-    }
-
-    private void updateGame(Mono<FilePart> game, String id) {
-        try {
-            Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        game.flatMap(fp -> fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id))).subscribe();
-    }
+//    @PutMapping("/{id}")
+//    public Mono<Object> update(@RequestPart Mono<FilePart> thumbnail,
+//                                                            @RequestPart Mono<FilePart> game,
+//                                                            @PathVariable String id,
+//                                                            @RequestParam String newName) {
+//
+//        if (Objects.isNull(newName)) {
+//            return Mono.just(new ResponseEntity<>(Map.of("null name", ""), HttpStatus.NOT_FOUND));
+//        }
+//
+//        if (Objects.nonNull(game)) {
+//            updateGame(game, id);
+//        }
+//
+//        gridFsTemplate.delete(query(where("_id").is(id))).subscribe();
+//        return thumbnail
+//                .flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename(), new AppFileMetaData(newName)));
+//    }
+//
+//    private void updateGame(Mono<FilePart> game, String id) {
+//        try {
+//            Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        game.flatMap(fp -> fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id))).subscribe();
+//    }
 
     @GetMapping
     public Flux<AppFileMetaData> getAllApps() {
