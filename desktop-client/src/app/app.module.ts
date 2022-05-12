@@ -1,32 +1,36 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule} from '@angular/common/http';
 
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
+import {LayoutModule} from '@angular/cdk/layout';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCardModule} from '@angular/material/card';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HttpInterceptorImpl } from './http.interceptor';
-import { AppListComponent } from './app-list/app-list.component';
-import { AppFormComponent } from './app-form/app-form.component';
-import { AddNewAppComponent } from './add-new-app/add-new-app.component';
-import { EditAppComponent } from './edit-app/edit-app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HttpInterceptorImpl} from './http.interceptor';
+import {AppListComponent} from './app-list/app-list.component';
+import {AppFormComponent} from './app-form/app-form.component';
+import {AddNewAppComponent} from './add-new-app/add-new-app.component';
+import {EditAppComponent} from './edit-app/edit-app.component';
+import {IndexComponent} from './forum/post/index/index.component';
+import {ViewComponent} from './forum/post/view/view.component';
+import {CreateComponent} from './forum/post/create/create.component';
+import {EditComponent} from './forum/post/edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,10 @@ import { EditAppComponent } from './edit-app/edit-app.component';
     AppFormComponent,
     AddNewAppComponent,
     EditAppComponent,
+    IndexComponent,
+    ViewComponent,
+    CreateComponent,
+    EditComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,4 +74,5 @@ import { EditAppComponent } from './edit-app/edit-app.component';
   providers: [{provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorImpl, multi: true}],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

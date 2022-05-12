@@ -40,6 +40,10 @@ spring:
           uri: lb://DATA-PROVIDER-SERVICE
           predicates:
             - Path=/data/**
+        - id: forum-service
+          uri: lb://FORUM-SERVICE
+          predicates:
+            - Path=/posts/**
 #          filters:
 #            - name: RequestRateLimiter
 #              args:

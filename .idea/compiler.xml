@@ -8,12 +8,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api-gateway" />
-        <module name="test-service" />
         <module name="data-provider-service" />
-        <module name="eureka-server" />
         <module name="app-provider-service" />
         <module name="mobile-api-gateway" />
+        <module name="forum-service" />
+        <module name="api-gateway" />
+        <module name="test-service" />
+        <module name="eureka-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -21,6 +22,7 @@
       <module name="app-provider-service" target="16" />
       <module name="data-provider-service" target="16" />
       <module name="eureka-server" target="16" />
+      <module name="forum-service" target="16" />
       <module name="mobile-api-gateway" target="16" />
       <module name="test-service" target="16" />
     </bytecodeTargetLevel>
@@ -31,6 +33,7 @@
       <module name="app-provider-service" options="-parameters" />
       <module name="data-provider-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="forum-service" options="-parameters" />
       <module name="mobile-api-gateway" options="-parameters" />
       <module name="test-service" options="-parameters" />
     </option>

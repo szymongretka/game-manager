@@ -24,26 +24,9 @@ public class ApiGatewayApplication {
 }
 
 @RestController
-class BookController {
+class UserController {
 
-    private static final Logger log = LoggerFactory.getLogger(BookController.class);
-
-    @GetMapping("/books")
-    public Flux<Book> getBooks() {
-        return Flux.just(
-                new Book("1", "Harry Potter"),
-                new Book("2","His Dark Materials"),
-                new Book("3","The Hobbit"),
-                new Book("4","The Lord of the Rings")
-        ).doFirst(() -> log.info("Returning list of books in the catalog"));
-    }
-
-    @GetMapping("/books/{isbn}")
-    public Mono<Book> getBook(@PathVariable String isbn) {
-        return Mono.just(
-                new Book("1", "Harry Potter")
-        ).doFirst(() -> log.info("Returning book"));
-    }
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/user")
     public Mono<User> getUser(@AuthenticationPrincipal OidcUser oidcUser) {
@@ -57,8 +40,6 @@ class BookController {
     }
 
 }
-
-record Book(String isbn, String name) {}
 
 record User(
         String username,

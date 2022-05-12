@@ -12,6 +12,10 @@
         <mat-icon>cloud_upload</mat-icon>
         <span>Upload Game</span>
       </a>
+      <a mat-list-item routerLink="/post/index" *ngIf="isAuthenticated">
+        <mat-icon></mat-icon>
+        <span>Forum</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -1,0 +1,23 @@
+server:
+  port: 8030
+
+spring:
+  application:
+    name: forum-service
+  webflux:
+    base-path: /posts
+  profiles:
+    active: dev
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
+
+eureka:
+  instance:
+    appname: ${spring.application.name}
+  client:
+    fetch-registry: true #Register the service to the Eureka server
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:9000}/eureka #In the following server
