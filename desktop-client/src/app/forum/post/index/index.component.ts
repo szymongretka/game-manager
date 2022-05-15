@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Post } from '../post';
 import {PostService} from "../../../services/post.service";
+import {Post, User} from "../../../types";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-index',
@@ -11,13 +12,14 @@ export class IndexComponent implements OnInit {
 
   posts: Post[] = [];
 
-  constructor(public postService: PostService) { }
+  constructor(public postService: PostService, public appComponent: AppComponent) {
+  }
 
   ngOnInit(): void {
     this.postService.getAll().subscribe((data: Post[])=>{
       this.posts = data;
       console.log(this.posts);
-    })
+    });
   }
 
   deletePost(id:number){

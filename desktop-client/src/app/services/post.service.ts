@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {Post} from "../forum/post/post";
+import {Post, Comment} from "../types";
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +46,20 @@ export class PostService {
 
   delete(id: number) {
     return this.httpClient.delete('/posts/' + id)
+      .pipe(
+        catchError(this.errorHandler)
+      )
+  }
+
+  deleteComment(id: number) {
+    return this.httpClient.delete('/posts/comment/' + id)
+      .pipe(
+        catchError(this.errorHandler)
+      )
+  }
+
+  addComment(comment: Comment): Observable<any> {
+    return this.httpClient.post('/posts/comment/', comment, this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
       )

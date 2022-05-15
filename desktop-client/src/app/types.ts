@@ -13,3 +13,18 @@ export interface User {
   lastName: string,
   roles: string[]
 }
+
+export interface Post {
+  id: number;
+  title: string;
+  body: string;
+  comments: Comment[];
+  userName: string;
+}
+
+export interface Comment {
+  id: number;
+  text: string;
+  postId: number;
+  userName: string;
+}

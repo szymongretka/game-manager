@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Post } from '../post';
+
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {PostService} from "../../../services/post.service";
+import {Post} from "../../../types";
 
 @Component({
   selector: 'app-edit',
@@ -11,9 +12,9 @@ import {PostService} from "../../../services/post.service";
 })
 export class EditComponent implements OnInit {
 
-  id: number;
-  post: Post;
-  form: FormGroup;
+  id!: number;
+  post!: Post;
+  form!: FormGroup;
 
   constructor(
     public postService: PostService,
