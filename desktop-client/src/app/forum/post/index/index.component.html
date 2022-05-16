@@ -13,6 +13,7 @@
       <td>{{ post.id }}</td>
       <td>{{ post.title }}</td>
       <td>{{ post.body }}</td>
+      <tbody>
       <td>
         <a href="#" [routerLink]="['/post/', post.id, 'view']" class="btn btn-info">View</a>
         <a href="#" [routerLink]="['/post/', post.id, 'edit']" class="btn btn-primary"
@@ -24,6 +25,7 @@
           Delete
         </button>
       </td>
+      </tbody>
     </tr>
   </table>
 </div>

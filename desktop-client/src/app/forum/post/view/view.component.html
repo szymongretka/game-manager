@@ -27,12 +27,14 @@
     <tr *ngFor="let comment of post.comments">
       <td>{{ comment.userName }}</td>
       <td>{{ comment.text }}</td>
+      <tbody>
       <td>
         <button type="button" (click)="deleteComment(comment.id)" class="btn btn-danger"
                 *ngIf="comment.userName == this.appComponent.user?.username || this.appComponent.isAdmin()">
           Delete
         </button>
       </td>
+      </tbody>
     </tr>
   </table>
 

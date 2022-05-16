@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class ForumController {
@@ -61,6 +62,9 @@ public class ForumController {
 
     @DeleteMapping("/{id}")
     public Mono<Void> deleteById(@PathVariable("id") Long id, Principal principal) {
+        if (isAdmin(principal)) {
+            return postRepository.deleteById(id);
+        }
         return postRepository.deleteByIdAndUserName(id, extractUsername(principal));
     }
 
@@ -77,6 +81,11 @@ public class ForumController {
 
     private String extractUsername(Principal principal) {
         return (String) ((JwtAuthenticationToken) principal).getTokenAttributes().get("preferred_username");
+    }
+
+    private boolean isAdmin(Principal principal) {
+        List<String> roles = (List<String>) ((JwtAuthenticationToken) principal).getTokenAttributes().get("roles");
+        return roles.contains("admin");
     }
 
 }
