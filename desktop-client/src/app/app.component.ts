@@ -51,4 +51,9 @@ export class AppComponent implements OnInit {
   isEmployee(): boolean {
     return this.user ? this.user.roles.find(role => role === 'employee') != undefined : false;
   }
+
+  isAdmin(): boolean {
+    return this.user ? this.user.roles.find(role => role === 'admin') != undefined : false;
+  }
+
 }

@@ -15,8 +15,14 @@
       <td>{{ post.body }}</td>
       <td>
         <a href="#" [routerLink]="['/post/', post.id, 'view']" class="btn btn-info">View</a>
-        <a href="#" [routerLink]="['/post/', post.id, 'edit']" class="btn btn-primary" *ngIf="post.userName == this.appComponent.user?.username">Edit</a>
-        <button type="button" (click)="deletePost(post.id)" class="btn btn-danger" *ngIf="post.userName == this.appComponent.user?.username">Delete</button>
+        <a href="#" [routerLink]="['/post/', post.id, 'edit']" class="btn btn-primary"
+           *ngIf="post.userName == this.appComponent.user?.username || this.appComponent.isAdmin()">
+          Edit
+        </a>
+        <button type="button" (click)="deletePost(post.id)" class="btn btn-danger"
+                *ngIf="post.userName == this.appComponent.user?.username || this.appComponent.isAdmin()">
+          Delete
+        </button>
       </td>
     </tr>
   </table>

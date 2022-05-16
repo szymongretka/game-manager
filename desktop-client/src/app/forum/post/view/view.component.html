@@ -28,7 +28,10 @@
       <td>{{ comment.userName }}</td>
       <td>{{ comment.text }}</td>
       <td>
-        <button type="button" (click)="deleteComment(comment.id)" class="btn btn-danger" *ngIf="comment.userName == this.appComponent.user?.username">Delete</button>
+        <button type="button" (click)="deleteComment(comment.id)" class="btn btn-danger"
+                *ngIf="comment.userName == this.appComponent.user?.username || this.appComponent.isAdmin()">
+          Delete
+        </button>
       </td>
     </tr>
   </table>

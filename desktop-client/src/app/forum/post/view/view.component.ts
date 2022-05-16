@@ -24,6 +24,7 @@ export class ViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
+    console.log('admin ' + this.appComponent.isAdmin())
   }
 
   ngOnInit(): void {
