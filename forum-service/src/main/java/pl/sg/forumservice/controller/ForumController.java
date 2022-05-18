@@ -50,7 +50,7 @@ public class ForumController {
     public Mono<Post> updatePost(@PathVariable Long id, @RequestBody Post post, Principal principal) {
         return postRepository.findById(id)
                 .map(p -> {
-                    if (!p.getUserName().equals(extractUsername(principal))) {
+                    if (!p.getUserName().equals(extractUsername(principal)) && !isAdmin(principal)) {
                         throw new NotAllowedException("Not authorized!");
                     }
                     p.setBody(post.getBody());
@@ -76,6 +76,9 @@ public class ForumController {
 
     @DeleteMapping("/comment/{id}")
     public Mono<Void> deleteComment(@PathVariable("id") Long id, Principal principal) {
+        if (isAdmin(principal)) {
+            return commentRepository.deleteById(id);
+        }
         return commentRepository.deleteByIdAndUserName(id, extractUsername(principal));
     }
 
