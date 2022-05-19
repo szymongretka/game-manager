@@ -1,0 +1,28 @@
+server:
+  port: 8099
+  servlet:
+    context-path: /scoreboard
+
+spring:
+  application:
+    name: scoreboard-service
+#  webflux:
+#    base-path: /scoreboard
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console.enabled: true
+
+
+eureka:
+  instance:
+    appname: ${spring.application.name}
+  client:
+    fetch-registry: true #Register the service to the Eureka server
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:9000}/eureka #In the following server

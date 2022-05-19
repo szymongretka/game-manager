@@ -28,3 +28,10 @@ export interface Comment {
   postId: number;
   userName: string;
 }
+
+export interface Score {
+  id: number;
+  username: string;
+  score: number;
+  game: string;
+}

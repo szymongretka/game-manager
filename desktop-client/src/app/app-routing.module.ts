@@ -7,6 +7,7 @@ import {IndexComponent} from "./forum/post/index/index.component";
 import {ViewComponent} from "./forum/post/view/view.component";
 import {CreateComponent} from "./forum/post/create/create.component";
 import {EditComponent} from "./forum/post/edit/edit.component";
+import {ScoreboardViewComponent} from "./scoreboard/view/scoreboard-view.component";
 
 const routes: Routes = [
   { path: 'browse-apps', component: AppListComponent, pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'post/index', component: IndexComponent },
   { path: 'post/:postId/view', component: ViewComponent },
   { path: 'post/create', component: CreateComponent },
-  { path: 'post/:postId/edit', component: EditComponent }
+  { path: 'post/:postId/edit', component: EditComponent },
+  { path: 'scoreboard/view', component: ScoreboardViewComponent }
 ];
 
 @NgModule({

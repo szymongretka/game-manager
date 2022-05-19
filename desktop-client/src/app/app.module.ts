@@ -31,6 +31,7 @@ import {IndexComponent} from './forum/post/index/index.component';
 import {ViewComponent} from './forum/post/view/view.component';
 import {CreateComponent} from './forum/post/create/create.component';
 import {EditComponent} from './forum/post/edit/edit.component';
+import {ScoreboardViewComponent} from "./scoreboard/view/scoreboard-view.component";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {EditComponent} from './forum/post/edit/edit.component';
     EditAppComponent,
     IndexComponent,
     ViewComponent,
+    ScoreboardViewComponent,
     CreateComponent,
     EditComponent,
   ],

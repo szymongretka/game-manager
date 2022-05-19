@@ -44,6 +44,10 @@ spring:
           uri: lb://FORUM-SERVICE
           predicates:
             - Path=/posts/**
+        - id: scoreboard-service
+          uri: lb://SCOREBOARD-SERVICE
+          predicates:
+            - Path=/scoreboard/**
 #          filters:
 #            - name: RequestRateLimiter
 #              args:

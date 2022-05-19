@@ -33,5 +33,11 @@ cd ..
 echo "Building the forum service"
 cd forum-service
 ./mvnw clean package -DskipTests=true
-docker build --tag forum-gateway .
+docker build --tag forum-service .
+cd ..
+
+echo "Building the scoreboard service"
+cd forum-service
+./mvnw clean package -DskipTests=true
+docker build --tag scoreboard-service .
 cd ..

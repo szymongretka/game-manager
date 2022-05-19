@@ -108,3 +108,17 @@ services:
     environment:
       - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
+
+  scoreboard-service:
+    image: scoreboard-service:latest
+    container_name: scoreboard-service
+    expose:
+      - "8099"
+    ports:
+      - "8099:8099"
+    depends_on:
+      - eureka
+      - keycloak
+    environment:
+      - KEYCLOAK_URL=http://192.168.0.85:8080
+      - EUREKA_SERVER=http://eureka:9000
