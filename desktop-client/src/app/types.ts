@@ -32,6 +32,6 @@ export interface Comment {
 export interface Score {
   id: number;
   username: string;
-  score: number;
-  game: string;
+  points: number;
+  gameName: string;
 }

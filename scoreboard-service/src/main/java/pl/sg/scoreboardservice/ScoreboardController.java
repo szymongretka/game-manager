@@ -1,13 +1,19 @@
 package pl.sg.scoreboardservice;
 
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/") //TODO może GRAPHQL??
+//TODO może GRAPHQL??
 public class ScoreboardController {
+
+    private static final Logger log = LoggerFactory.getLogger(ScoreboardController.class);
 
     private final ScoreRepo scoreRepo;
 
@@ -16,14 +22,15 @@ public class ScoreboardController {
     }
 
     @PostMapping("/save")
-    public String saveScore(@Valid @RequestBody Score score) {
-        scoreRepo.save(score);
-        return "OK!";
+    public Mono<String> saveScore(@Valid @RequestBody Score score) {
+        return scoreRepo.save(score).map(Score::toString);
     }
 
     @GetMapping
-    public List<Score> scores() {
-        return scoreRepo.findAll();
+    public Flux<Score> scores() {
+        return scoreRepo.findAll().doOnNext(customer -> {
+            log.info(customer.toString());
+        });
     }
 
 }

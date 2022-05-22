@@ -25,7 +25,7 @@
       <module name="eureka-server" target="16" />
       <module name="forum-service" target="16" />
       <module name="mobile-api-gateway" target="16" />
-      <module name="scoreboard-service" target="11" />
+      <module name="scoreboard-service" target="16" />
       <module name="test-service" target="16" />
     </bytecodeTargetLevel>
   </component>

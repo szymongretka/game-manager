@@ -6,13 +6,12 @@
       <th>User name</th>
       <th>Score</th>
       <th>Game name</th>
-      <th width="220px">Action</th>
     </tr>
     <tr *ngFor="let score of scores">
       <td>{{ score.id }}</td>
       <td>{{ score.username }}</td>
-      <td>{{ score.score }}</td>
-      <td>{{ score.game }}</td>
+      <td>{{ score.points }}</td>
+      <td>{{ score.gameName }}</td>
     </tr>
   </table>
 </div>
