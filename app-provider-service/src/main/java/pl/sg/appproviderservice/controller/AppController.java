@@ -2,6 +2,7 @@ package pl.sg.appproviderservice.controller;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
@@ -11,9 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import pl.sg.appproviderservice.entity.AppFileMetaData;
+import pl.sg.appproviderservice.exception.advice.InvalidExtensionException;
 import pl.sg.appproviderservice.repository.ApplicationFileRepository;
 import pl.sg.appproviderservice.service.ApplicationFileService;
 import reactor.core.publisher.Flux;
@@ -25,10 +28,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.security.Principal;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -49,16 +50,30 @@ public class AppController { //TODO przechowywac info w fs files jako metadane a
     @PostMapping
     public Mono<Object> upload(@RequestPart Mono<FilePart> thumbnail,
                                @RequestPart Mono<FilePart> game,
-                               @RequestParam String name) {
+                               @RequestParam String name,
+                               Principal principal) {
 
 
         return gridFsTemplate.findOne(query(whereMetaData().exists(true).and("metadata.name").is(name)))
                 .flatMap(e -> Mono.error(new DuplicateKeyException("App with given name already exists! " + name)))
-                .switchIfEmpty(Mono.defer(() -> thumbnail.flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename(), part.name(), new AppFileMetaData(name)))
-                .map((id) -> {
-                    game.flatMap(fp -> fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id))).subscribe();
-                    return ok().body(Map.of("id", id));
-                })));
+                .switchIfEmpty(Mono.defer(() -> thumbnail.flatMap(part -> {
+                    String thumbnailExtension = FilenameUtils.getExtension(part.filename());
+                    if (!thumbnailExtension.equalsIgnoreCase("png")) {
+                        return Mono.error(new InvalidExtensionException());
+                    }
+                    return this.gridFsTemplate.store(part.content(), part.filename(), part.name(), new AppFileMetaData(name, extractUsername(principal)));
+                })
+                        .map((id) -> {
+
+                            game.flatMap(fp -> {
+                                String gameExtension = FilenameUtils.getExtension(fp.filename());
+                                if (!gameExtension.equalsIgnoreCase("jar")) {
+                                    return Mono.error(new InvalidExtensionException());
+                                }
+                                return fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id));
+                            }).subscribe();
+                            return ok().body(Map.of("id", id));
+                        })));
     }
 
 //    @PutMapping("/{id}")
@@ -185,6 +200,15 @@ public class AppController { //TODO przechowywac info w fs files jako metadane a
         Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id));
 //        return gridFsTemplate.delete(query(whereMetaData().exists(true).and("metadata.name").is(id))).then();
         return gridFsTemplate.delete(query(where("_id").is(id)));
+    }
+
+    private String extractUsername(Principal principal) {
+        return (String) ((JwtAuthenticationToken) principal).getTokenAttributes().get("preferred_username");
+    }
+
+    private boolean isAdmin(Principal principal) {
+        List<String> roles = (List<String>) ((JwtAuthenticationToken) principal).getTokenAttributes().get("roles");
+        return roles.contains("admin");
     }
 
 }

@@ -13,9 +13,11 @@ public class AppFileMetaData {
 
     private String id;
     private String name;
+    private String username;
 
-    public AppFileMetaData(String name) {
+    public AppFileMetaData(String name, String username) {
         this.name = name;
+        this.username = username;
     }
 
 }

@@ -21,6 +21,11 @@ export class AddNewAppComponent implements OnInit {
 
   fileInfos?: Observable<any>;
 
+  invalidThumbnailType: boolean = false;
+  thumbnailInvalidType: string | undefined;
+  invalidGameType: boolean = false;
+  gameInvalidType: string | undefined;
+
   constructor(private appService: AppService, private router: Router) { }
 
   ngOnInit(): void {
@@ -28,10 +33,32 @@ export class AddNewAppComponent implements OnInit {
 
   selectThumbnail(event: any): void {
     this.selectedThumbnail = event.target.files;
+    this.validateExtension(this.selectedThumbnail, 'png');
   }
 
   selectGame(event: any): void {
     this.selectedGame = event.target.files;
+    this.validateGameExtension(this.selectedGame, 'jar');
+  }
+
+  validateExtension(selectedThumbnail: FileList | undefined, extension: string): void {
+    // @ts-ignore
+    const thumbnailName: string = selectedThumbnail.item(0).name;
+    let ext = thumbnailName.substring(thumbnailName.lastIndexOf('.') + 1);
+    if(ext != extension) {
+      this.invalidThumbnailType = true;
+      this.thumbnailInvalidType = ext;
+    }
+  }
+
+  validateGameExtension(selectedThumbnail: FileList | undefined, extension: string): void {
+    // @ts-ignore
+    const gameName: string = selectedThumbnail.item(0).name;
+    let ext = gameName.substring(gameName.lastIndexOf('.') + 1);
+    if(ext != extension) {
+      this.invalidGameType = true;
+      this.gameInvalidType = ext;
+    }
   }
 
   upload(): void {
@@ -42,6 +69,7 @@ export class AddNewAppComponent implements OnInit {
       const game: File | null = this.selectedGame.item(0);
 
       if (thumbnail && game) {
+
         this.currentThumbnail = thumbnail;
         this.currentGame = game;
 
