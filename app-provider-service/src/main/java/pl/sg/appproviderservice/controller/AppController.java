@@ -3,19 +3,19 @@ package pl.sg.appproviderservice.controller;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import pl.sg.appproviderservice.entity.AppFileMetaData;
+import pl.sg.appproviderservice.exception.advice.AppNotFoundException;
 import pl.sg.appproviderservice.exception.advice.InvalidExtensionException;
 import pl.sg.appproviderservice.repository.ApplicationFileRepository;
 import pl.sg.appproviderservice.service.ApplicationFileService;
@@ -23,6 +23,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -70,7 +71,7 @@ public class AppController { //TODO przechowywac info w fs files jako metadane a
                                 if (!gameExtension.equalsIgnoreCase("jar")) {
                                     return Mono.error(new InvalidExtensionException());
                                 }
-                                return fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id));
+                                return fp.transferTo(Paths.get(basePath + "/app-provider-service/files/" + id + ".jar"));
                             }).subscribe();
                             return ok().body(Map.of("id", id));
                         })));
@@ -112,6 +113,9 @@ public class AppController { //TODO przechowywac info w fs files jako metadane a
                     AppFileMetaData metaData = new AppFileMetaData();
                     if (Objects.nonNull(x) && x.getMetadata().containsKey("name")) {
                         metaData.setName(x.getMetadata().get("name").toString());
+                    }
+                    if (Objects.nonNull(x) && x.getMetadata().containsKey("username")) {
+                        metaData.setUsername(x.getMetadata().get("username").toString());
                     }
                     metaData.setId(x.getObjectId().toHexString());
                     return metaData;
@@ -177,29 +181,36 @@ public class AppController { //TODO przechowywac info w fs files jako metadane a
     }
 
 
-    @GetMapping(value = "/game/{id}", produces = APPLICATION_OCTET_STREAM_VALUE)
-    public Mono<ResponseEntity<Resource>> downloadGame(@PathVariable("id") String id) {
-        return Mono.<Resource>fromCallable(() -> {
-            String fileLocation = basePath + "/app-provider-service/files/" + id;
-            String path = Paths.get(fileLocation).toAbsolutePath().normalize().toString();
-            return new FileSystemResource(path);
-        })
-                .subscribeOn(Schedulers.boundedElastic())
-                .<ResponseEntity<Resource>>flatMap(resource -> {
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setContentDispositionFormData(id, id);
-                    return Mono.just(ResponseEntity
-                            .ok().cacheControl(CacheControl.noCache())
-                            .headers(headers)
-                            .body(resource));
-                });
+    @GetMapping(value = "/game/{id}")
+    public Mono<Void> downloadGame(@PathVariable("id") String id, ServerHttpResponse response) throws IOException {
+        String fileName = id + ".jar";
+        ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
+        response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + "");
+        response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        String fileLocation = basePath + "/app-provider-service/files/" + id + ".jar";
+        String path = Paths.get(fileLocation).toAbsolutePath().normalize().toString();
+        File file = new FileSystemResource(path).getFile();
+        return zeroCopyResponse.writeWith(file, 0, file.length());
     }
 
     @DeleteMapping(value = "/{id}")
-    public Mono<Void> delete(@PathVariable("id") String id) throws IOException {
-        Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id));
-//        return gridFsTemplate.delete(query(whereMetaData().exists(true).and("metadata.name").is(id))).then();
-        return gridFsTemplate.delete(query(where("_id").is(id)));
+    public Mono<Void> delete(@PathVariable("id") String id, Principal principal) throws IOException {
+        if (isAdmin(principal)) {
+            Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id + ".jar"));
+            return gridFsTemplate.delete(query(where("_id").is(id)));
+        }
+
+        Mono<GridFSFile> mono = gridFsTemplate
+                .findOne(query(where("_id").is(id).and("metadata.username").is(extractUsername(principal))));
+
+        return mono.flatMap(app -> {
+                    try {
+                        Files.deleteIfExists(Paths.get(basePath + "/app-provider-service/files/" + id + ".jar"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return gridFsTemplate.delete(query(where("_id").is(id)));
+                }).switchIfEmpty(Mono.defer(() -> Mono.error(new AppNotFoundException())));
     }
 
     private String extractUsername(Principal principal) {

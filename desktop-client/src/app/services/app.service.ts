@@ -66,5 +66,9 @@ export class AppService {
     return this.httpClient.delete(`/app/${id}`);
   }
 
+  downloadApp(id: string): Observable<Blob> {
+    return this.httpClient.get(`/app/game/${id}`, {responseType: 'blob'});
+  }
+
 
 }

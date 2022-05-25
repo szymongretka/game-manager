@@ -3,7 +3,8 @@ import {SafeUrl} from "@angular/platform-browser";
 export interface GameDTO {
   id: string,
   name: string,
-  thumbnail: SafeUrl | null
+  thumbnail: SafeUrl | null,
+  username: string;
 }
 
 export interface User {

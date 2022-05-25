@@ -7,6 +7,7 @@ import {FileUploadService} from "../services/file-upload.service";
 import {Router} from "@angular/router";
 import {AppService} from "../services/app.service";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {AppComponent} from "../app.component";
 
 @Component({
   selector: 'app-app-list',
@@ -21,6 +22,7 @@ export class AppListComponent implements OnInit {
     map(({matches}) => matches ? 2 : 3));
 
   constructor(
+    public appComponent: AppComponent,
     public dialog: MatDialog,
     private appService: AppService,
     private fileService: FileUploadService,
@@ -52,6 +54,16 @@ export class AppListComponent implements OnInit {
 
   removeApp(id: string) : void {
     this.appService.deleteApp(id).subscribe();
+  }
+
+  downloadApp(id: string): void {
+    this.appService.downloadApp(id).subscribe(res => {
+      let filename = id + '.jar';
+      let a = document.createElement('a');
+      a.download = filename;
+      a.href = window.URL.createObjectURL(res);
+      a.click();
+    });
   }
 
 }

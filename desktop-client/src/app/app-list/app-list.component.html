@@ -11,7 +11,8 @@
             </button>
             <mat-menu #menu="matMenu" xPosition="before">
 <!--              <button mat-menu-item routerLink="/edit-app/{{ app.id }}">Edit</button>-->
-              <button mat-menu-item (click)="removeApp(app.id)">Remove</button>
+              <button mat-menu-item (click)="downloadApp(app.id)">Download</button>
+              <button mat-menu-item (click)="removeApp(app.id)" *ngIf="app.username == this.appComponent.user?.username || this.appComponent.isAdmin()">Remove</button>
             </mat-menu>
           </mat-card-title>
         </mat-card-header>
