@@ -22,6 +22,29 @@ services:
     ports:
       - 8080:8080
 
+  grafana:
+    image: grafana/grafana:8.0.1
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: password
+    volumes:
+      - ./platform-config/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./platform-config/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - grafana-data:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus:v2.27.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./platform-config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+
   #Applications
   eureka:
     image: eureka-server:latest
@@ -34,7 +57,7 @@ services:
       - EUREKA_SERVER=http://eureka:9000
       - EUREKA_HOST=eureka
 
-  gateway:
+  apigateway:
     image: api-gateway:latest
     container_name: gateway
     expose:
@@ -44,7 +67,7 @@ services:
     depends_on:
       - keycloak
       - eureka
-#      - app-service
+    #      - app-service
     environment:
       - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
@@ -122,3 +145,9 @@ services:
     environment:
       - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
+
+
+
+volumes:
+  grafana-data:
+    name: grafana-data
