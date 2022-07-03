@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-8">
+    <label class="btn btn-default p-0">Thumbnail
+      <input type="file" name="thumbnail" (change)="selectThumbnail($event)" />
+    </label>
+  </div>
+  <div class="col-8">
+    <label class="btn btn-default p-0">Game
+      <input type="file" name="game" (change)="selectGame($event)" />
+    </label>
+  </div>
+  <mat-form-field class="appName-form-field" appearance="fill">
+    <mat-label>Application name</mat-label>
+    <input matInput type="text" [(ngModel)]="appName">
+    <button *ngIf="appName" matSuffix mat-icon-button aria-label="Clear" (click)="appName=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <div class="col-4">
+    <button class="btn btn-success btn-sm" [disabled]="!appName" (click)="upload()">
+      Upload
+    </button>
+  </div>
+</div>
+
+<div *ngIf="currentThumbnail && currentGame" class="progress my-3">
+  <div
+    class="progress-bar progress-bar-info progress-bar-striped"
+    role="progressbar"
+    attr.aria-valuenow="{{ progress }}"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [ngStyle]="{ width: progress + '%' }"
+  >
+    {{ progress }}%
+  </div>
+</div>

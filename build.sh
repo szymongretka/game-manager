@@ -29,3 +29,15 @@ cd mobile-api-gateway
 ./mvnw clean package -DskipTests=true
 docker build --tag mobile-api-gateway .
 cd ..
+
+echo "Building the forum service"
+cd forum-service
+./mvnw clean package -DskipTests=true
+docker build --tag forum-service .
+cd ..
+
+echo "Building the scoreboard service"
+cd forum-service
+./mvnw clean package -DskipTests=true
+docker build --tag scoreboard-service .
+cd ..

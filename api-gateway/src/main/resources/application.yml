@@ -9,13 +9,13 @@ spring:
       client:
         registration:
           keycloak:
-#            enable-cors: true
+            enable-cors: true
             client-id: api-gateway
-            client-secret: 580009c1-079c-41c7-9ab7-28d1cc2eda3d
+            client-secret: 636f4ef3-e6aa-4076-a5ae-5e4925524fed
             scope: openid
         provider:
           keycloak:
-#            enable-cors: true
+            enable-cors: true
             issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
   session:
     store-type: redis
@@ -40,6 +40,14 @@ spring:
           uri: lb://DATA-PROVIDER-SERVICE
           predicates:
             - Path=/data/**
+        - id: forum-service
+          uri: lb://FORUM-SERVICE
+          predicates:
+            - Path=/posts/**
+        - id: scoreboard-service
+          uri: lb://SCOREBOARD-SERVICE
+          predicates:
+            - Path=/scoreboard/**
 #          filters:
 #            - name: RequestRateLimiter
 #              args:

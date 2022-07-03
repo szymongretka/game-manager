@@ -15,12 +15,32 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/auth/realms/GameManager
-  jpa:
-    hibernate:
-      ddl-auto: update
-  servlet:
-    multipart:
-      max-file-size: 2MB
+  data:
+    mongodb:
+      database: test
+      host: localhost
+      port: 27017
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#  servlet:
+#    multipart:
+#      max-file-size: 2MB
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 eureka:
   instance:

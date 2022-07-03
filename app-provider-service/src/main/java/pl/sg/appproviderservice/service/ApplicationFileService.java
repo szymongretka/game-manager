@@ -10,6 +10,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface ApplicationFileService {
+
+
+
+
     ApplicationFile store(FilePart file) throws IOException;
     ApplicationFile getFile(Long id);
     Stream<ApplicationFile> getAllFiles();

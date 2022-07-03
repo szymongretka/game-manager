@@ -1,0 +1,36 @@
+<div class="grid-container" *ngIf="apps">
+  <h1 class="mat-h1">Browse Apps</h1>
+  <mat-grid-list [cols]="colNumber | async" rowHeight="400px">
+    <mat-grid-tile *ngFor="let app of apps" colspan="1" rowspan="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{app.name}}
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+<!--              <button mat-menu-item routerLink="/edit-app/{{ app.id }}">Edit</button>-->
+              <button mat-menu-item (click)="downloadApp(app.id)">Download</button>
+              <button mat-menu-item (click)="removeApp(app.id)" *ngIf="app.username == this.appComponent.user?.username || this.appComponent.isAdmin()">Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <mat-list role="list">
+            <mat-list-item role="listitem">Id: {{ app.id }}</mat-list-item>
+            <mat-list-item role="listitem">Name: {{ app.name }}</mat-list-item>
+              <img [src]=app.thumbnail class="img-fluid rounded" alt="Responsive image">
+          </mat-list>
+        </mat-card-content>
+<!--        <mat-card-actions class="card-actions">-->
+<!--          <button mat-raised-button (click)="createOrder(app)" color="primary">ORDER</button>-->
+<!--        </mat-card-actions>-->
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<div class="grid-container" *ngIf="!apps">
+  <mat-spinner></mat-spinner>
+</div>

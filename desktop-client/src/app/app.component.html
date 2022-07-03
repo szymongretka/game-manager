@@ -4,17 +4,21 @@
                [mode]="(isHandset$ | async) ? 'over' : 'side'">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/browse-books">
-        <mat-icon>menu_book</mat-icon>
+      <a mat-list-item routerLink="/browse-apps">
+        <mat-icon>videogame_asset</mat-icon>
         <span>Browse Games</span>
       </a>
-      <a mat-list-item routerLink="/upload-file" *ngIf="isAuthenticated">
-        <mat-icon></mat-icon>
+      <a mat-list-item routerLink="/add-app" *ngIf="isAuthenticated">
+        <mat-icon>cloud_upload</mat-icon>
         <span>Upload Game</span>
       </a>
-      <a mat-list-item routerLink="/my-orders" *ngIf="isAuthenticated">
-        <mat-icon>storefront</mat-icon>
-        <span>My Orders</span>
+      <a mat-list-item routerLink="/post/index" *ngIf="isAuthenticated">
+        <mat-icon>forum</mat-icon>
+        <span>Forum</span>
+      </a>
+      <a mat-list-item routerLink="/scoreboard/view">
+        <mat-icon>score</mat-icon>
+        <span>Scoreboard</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>

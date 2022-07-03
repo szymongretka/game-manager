@@ -11,12 +11,14 @@ export class FileUploadService {
 
   constructor(private httpClient: HttpClient) { }
 
-  upload(file: File): Observable<HttpEvent<any>> {
+  upload(thumbnail: File, game: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
-    formData.append('file', file);
+    formData.append('thumbnail', thumbnail);
+    formData.append('game', game);
+    formData.append('name', 'testName');
 
-    const req = new HttpRequest('POST', `/app/upload`, formData, {
+    const req = new HttpRequest('POST', `/app`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -28,8 +30,16 @@ export class FileUploadService {
     return this.httpClient.get<GameDTO[]>(`/app/files`);
   }
 
-  downloadFile(id: number): any {
-    return this.httpClient.get(`/app/files/${id}`, {responseType: 'blob'});
+  downloadFile(id: string): any {
+    return this.httpClient.get(`/app/game/${id}`, {responseType: 'blob'});
+  }
+
+  test(): Observable<string[]> {
+    return this.httpClient.get<string[]>('/app/save/test');
+  }
+
+  downloadThumbnail(id: string): Observable<Blob> {
+    return this.httpClient.get(`/app/thumbnail/${id}`, {responseType: "blob"});
   }
 
 }

@@ -1,0 +1,13 @@
+scrape_configs:
+  - job_name: 'scoreboard-service'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: '/scoreboard/actuator/prometheus'
+    static_configs:
+      - targets: [ '192.168.0.85:8099' ]
+  - job_name: 'app-provider-service'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: '/app/actuator/prometheus'
+    static_configs:
+      - targets: [ '192.168.0.85:8045' ]

@@ -1,0 +1,59 @@
+<div class="container">
+  <h1>View Post</h1>
+
+  <a href="#" routerLink="/post/index" class="btn btn-primary">Back</a>
+
+  <div>
+    <strong>User:</strong>
+    <p>{{ post.userName }}</p>
+  </div>
+
+  <div>
+    <strong>Title:</strong>
+    <p>{{ post.title }}</p>
+  </div>
+
+  <div>
+    <strong>Body:</strong>
+    <p>{{ post.body }}</p>
+  </div>
+
+  <table class="table table-bordered">
+    <tr>
+      <th>User</th>
+      <th>Text</th>
+      <th width="220px">Action</th>
+    </tr>
+    <tr *ngFor="let comment of post.comments">
+      <td>{{ comment.userName }}</td>
+      <td>{{ comment.text }}</td>
+      <tbody>
+      <td>
+        <button type="button" (click)="deleteComment(comment.id)" class="btn btn-danger"
+                *ngIf="comment.userName == this.appComponent.user?.username || this.appComponent.isAdmin()">
+          Delete
+        </button>
+      </td>
+      </tbody>
+    </tr>
+  </table>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="form-group">
+      <label for="text">Text</label>
+      <textarea
+        formControlName="text"
+        id="text"
+        type="text"
+        class="form-control">
+            </textarea>
+      <div *ngIf="f.text.touched && f.text.invalid" class="alert alert-danger">
+        <div *ngIf="f.text.errors?.required">Text is required.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+  </form>
+
+</div>

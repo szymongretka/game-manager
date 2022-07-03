@@ -13,3 +13,10 @@ Firstly run:
 -Api Gateway
 
 -Rest of the services (order does not matter)
+
+
+start mongodb (sudo service mongod start)
+mongosh
+db.coll.find()
+db.fs.files.find()
+
