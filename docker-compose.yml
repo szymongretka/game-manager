@@ -130,3 +130,8 @@ services:
     command: '--config.file=/etc/prometheus/config.yml'
     volumes:
       - './platform-config/prometheus/prometheus.yml:/etc/prometheus/config.yml'
+
+  grafana:
+    image: 'grafana/grafana:6.5.0'
+    ports:
+      - '3000:3000'
