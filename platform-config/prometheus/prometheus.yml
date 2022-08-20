@@ -11,3 +11,9 @@ scrape_configs:
     metrics_path: '/app/actuator/prometheus'
     static_configs:
       - targets: [ '192.168.0.85:8045' ]
+  - job_name: 'api-gateway'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ '192.168.0.85:8082' ]
