@@ -1,5 +1,7 @@
 server:
   port: 8082
+  netty:
+    connection-timeout: 3000
 
 spring:
   application:
@@ -59,6 +61,20 @@ management:
   health:
     redis:
       enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 
 eureka:
   instance:
