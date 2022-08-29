@@ -51,21 +51,21 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
 
-  mobile-gateway:
-    image: mobile-api-gateway:latest
-    container_name: mobile-gateway
-    expose:
-      - "8083"
-    ports:
-      - "8083:8083"
-    depends_on:
-      - keycloak
-      - eureka
-    environment:
-      - KEYCLOAK_URL=http://192.168.0.85:8080
-      - EUREKA_SERVER=http://eureka:9000
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+#  mobile-gateway:
+#    image: mobile-api-gateway:latest
+#    container_name: mobile-gateway
+#    expose:
+#      - "8083"
+#    ports:
+#      - "8083:8083"
+#    depends_on:
+#      - keycloak
+#      - eureka
+#    environment:
+#      - KEYCLOAK_URL=http://192.168.0.85:8080
+#      - EUREKA_SERVER=http://eureka:9000
+#      - REDIS_HOST=redis
+#      - REDIS_PORT=6379
 
   data-service:
     image: data-service:latest
@@ -122,6 +122,16 @@ services:
     environment:
       - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
+
+
+  desktop-client:
+    image: desktop-client:latest
+    container_name: desktop-client
+    expose:
+      - "4200"
+    ports:
+      - "4200:4200"
+
 
   prometheus:
     image: 'prom/prometheus:v2.14.0'

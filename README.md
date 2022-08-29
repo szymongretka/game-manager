@@ -8,34 +8,22 @@ Warunki wstępne
 
 Aby uruchomić aplikację należy:
 1. Uruchomić MongoDB
-2. Uruchomić redisa (docker run -d --name redis -p 6379:6379)
-3. Uruchomić skrypty z pliku build.sh
-4. Po zbudowaniu wszyskich obrazów z poprzedniego kroku, będąc w folderze projektu, wywołać komendę docker-compose up -d
-5. Wszystkie serwisy powinny się uruchomić. 
+2. Uruchomić skrypty z pliku build.sh
+3. Po zbudowaniu wszyskich obrazów z poprzedniego kroku, będąc w folderze projektu, wywołać komendy:
+   - docker-compose.yml up -d keycloak
+   - docker-compose.yml up -d redis
+   - docker-compose.yml up -d eureka
+   - docker-compose.yml up -d gateway
+   - docker-compose.yml up -d app-service
+   - docker-compose.yml up -d forum-service
+   - docker-compose.yml up -d scoreboard-service
+     (opcjonalnie)
+   - docker-compose.yml up -d prometheus
+   - docker-compose.yml up -d grafana
+   - docker-compose.yml up -d desktop-client
 
 Aby otworzyć konsolę keycloaka, należy otworzyć przeglądarkę i wpisać http://localhost:8080
+
 Aby otworzyć UI aplikacji, należy otworzyć przeglądarkę i wpisać http://localhost:4200
-
-
-# ENGLISH VERSION
-Game manager app for providing managing data, apps, stats etc.
-
-In order to run the application:
-
-start mongodb
-
--run scripts from build.sh
-
--redis cache server (docker run -d --name redis -p 6379:6379 redis)
-
--keycloak server
-
--Eureka Server
-
--Api Gateway
-
--Rest of the services (order does not matter)
-
--optionally monitoring servers (prometheus & grafana)
 
 
