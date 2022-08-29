@@ -5,6 +5,8 @@ Warunki wstępne
 -zainstalowany docker
 -MongoDB (port 27017)
 -wolne porty: 8080, 8082, 8045, 8050, 8099, 6379, 3000, 4200
+-Najnowsza wersja nodeJSa oraz Angular CLI
+-IDE do uruchomienia aplikacji frontendowej (np. WebStorm) 
 
 Aby uruchomić aplikację należy:
 1. Uruchomić MongoDB
@@ -20,7 +22,7 @@ Aby uruchomić aplikację należy:
      (opcjonalnie)
    - docker-compose.yml up -d prometheus
    - docker-compose.yml up -d grafana
-   - docker-compose.yml up -d desktop-client
+4. Uruchomic aplikację frontendową przez IDE
 
 Aby otworzyć konsolę keycloaka, należy otworzyć przeglądarkę i wpisać http://localhost:8080
 
