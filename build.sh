@@ -42,7 +42,7 @@ cd scoreboard-service
 docker build --tag scoreboard-service .
 cd ..
 
-echo "Building dektop client"
-cd desktop-client
-docker build --tag desktop-client:latest .
-cd ..
+#echo "Building dektop client"
+#cd desktop-client
+#docker build --tag desktop-client:latest .
+#cd ..

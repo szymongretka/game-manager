@@ -23,6 +23,7 @@ Aby uruchomić aplikację należy:
    - docker-compose.yml up -d prometheus
    - docker-compose.yml up -d grafana
 4. Uruchomic aplikację frontendową przez IDE
+5. Stworzyć użytkownika korzystając z konsoli keycloaka lub zalogować się poprzez githuba
 
 Aby otworzyć konsolę keycloaka, należy otworzyć przeglądarkę i wpisać http://localhost:8080
 
