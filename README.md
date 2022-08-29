@@ -20,9 +20,10 @@ Aby uruchomić aplikację należy:
      (opcjonalnie)
    - docker-compose.yml up -d prometheus
    - docker-compose.yml up -d grafana
-4. 
+   - docker-compose.yml up -d desktop-client
 
 Aby otworzyć konsolę keycloaka, należy otworzyć przeglądarkę i wpisać http://localhost:8080
+
 Aby otworzyć UI aplikacji, należy otworzyć przeglądarkę i wpisać http://localhost:4200
 
 

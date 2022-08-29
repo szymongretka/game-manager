@@ -37,7 +37,12 @@ docker build --tag forum-service .
 cd ..
 
 echo "Building the scoreboard service"
-cd forum-service
+cd scoreboard-service
 ./mvnw clean package -DskipTests=true
 docker build --tag scoreboard-service .
+cd ..
+
+echo "Building dektop client"
+cd desktop-client
+docker build --tag desktop-client:latest .
 cd ..

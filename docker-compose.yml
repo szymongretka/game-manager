@@ -123,6 +123,16 @@ services:
       - KEYCLOAK_URL=http://192.168.0.85:8080
       - EUREKA_SERVER=http://eureka:9000
 
+
+  desktop-client:
+    image: desktop-client:latest
+    container_name: desktop-client
+    expose:
+      - "4200"
+    ports:
+      - "4200:4200"
+
+
   prometheus:
     image: 'prom/prometheus:v2.14.0'
     ports:
